@@ -9,4 +9,5 @@ public class AutoScaleApp {
     public static void main(String[] args) {
         SpringApplication.run(AutoScaleApp.class, args);
     }
+
 }

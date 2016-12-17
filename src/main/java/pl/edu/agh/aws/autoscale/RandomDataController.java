@@ -1,6 +1,5 @@
 package pl.edu.agh.aws.autoscale;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +15,7 @@ public class RandomDataController {
 
     @RequestMapping(value = "/random", method = RequestMethod.GET)
     public Collection<SomeRandomData> generateRandomData() {
-        return randomlyGeneratedDataOfSize(150_000);
+        return randomlyGeneratedDataOfSize(25_000);
     }
 
     private Collection<SomeRandomData> randomlyGeneratedDataOfSize(int n) {
@@ -38,8 +37,6 @@ public class RandomDataController {
         return new BigInteger(n, random).toString(32);
     }
 
-
-    @JsonAutoDetect()
     static class SomeRandomData {
         private final String valueA;
         private final String valueB;
@@ -57,4 +54,5 @@ public class RandomDataController {
             return valueB;
         }
     }
+
 }
