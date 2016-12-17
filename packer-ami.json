@@ -1,0 +1,42 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": ""
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "us-east-1",
+      "source_ami": "ami-06c4cb11",
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "ami_name": "iosr-aws-autoscale"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": "sudo apt-get install -y openjdk-8-jdk"
+    },
+    {
+      "type": "file",
+      "source": "target/iosr-aws-autoscale-1.0-SNAPSHOT.jar",
+      "destination": "/home/ubuntu/app.jar"
+    },
+    {
+      "type": "file",
+      "source": "app.service",
+      "destination": "/tmp/app.service"
+    },
+    {
+      "type": "shell",
+      "inline": "sudo mv /tmp/app.service /lib/systemd/system/app.service"
+    },
+    {
+      "type": "shell",
+      "inline": "sudo systemctl enable app.service"
+    }
+  ]
+}
