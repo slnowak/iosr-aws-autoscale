@@ -52,12 +52,31 @@ resource "aws_elb" "balancer" {
     interval = 30
   }
 
-  instances = [
-    "${aws_instance.web.id}"
-  ]
   cross_zone_load_balancing = true
   idle_timeout = 60
   connection_draining = true
   connection_draining_timeout = 400
 }
 
+resource "aws_autoscaling_group" "web-asg" {
+  availability_zones   = ["us-east-1b"]
+  name                 = "terraform-example-asg"
+  max_size             = "8"
+  min_size             = "1"
+  desired_capacity     = "2"
+  force_delete         = true
+  launch_configuration = "${aws_launch_configuration.autoscaling_conf.name}"
+  load_balancers       = ["${aws_elb.balancer.name}"]
+}
+
+resource "aws_launch_configuration" "autoscaling_conf" {
+  image_id = "ami-3ee4ec29"
+  instance_type = "t2.micro"
+  security_groups = [
+    "${aws_security_group.open_ports.id}"
+  ]
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
