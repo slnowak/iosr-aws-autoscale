@@ -4,7 +4,7 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff:
-.idea/workspace.xml
+../.idea/workspace.xml
 .idea/tasks.xml
 .idea/dictionaries
 .idea/vcs.xml
@@ -44,6 +44,10 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+### Terraform template
+# Compiled files
+*.tfstate
+*.tfstate.backup
 ### Maven template
 target/
 pom.xml.tag
@@ -69,3 +73,7 @@ buildNumber.properties
 hs_err_pid*
 .idea
 *.iml
+
+# SSH keys
+insecure-deployer
+insecure-deployer.pub
