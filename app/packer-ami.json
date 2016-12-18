@@ -19,7 +19,7 @@
     },
     {
       "type": "file",
-      "source": "target/iosr-aws-autoscale-1.0-SNAPSHOT.jar",
+      "source": "target/iosr-aws-autoscale-app-1.0-SNAPSHOT.jar",
       "destination": "/home/ubuntu/app.jar"
     },
     {

@@ -22,16 +22,6 @@ resource "aws_security_group" "open_ports" {
   }
 }
 
-resource "aws_instance" "web" {
-  ami = "ami-3ee4ec29"
-  instance_type = "t2.micro"
-  associate_public_ip_address = true
-
-  vpc_security_group_ids = [
-    "${aws_security_group.open_ports.id}"
-  ]
-}
-
 resource "aws_elb" "balancer" {
   availability_zones = [
     "us-east-1b"
@@ -70,7 +60,7 @@ resource "aws_autoscaling_group" "web-asg" {
 }
 
 resource "aws_launch_configuration" "autoscaling_conf" {
-  image_id = "ami-3ee4ec29"
+  image_id = "ami-7c3b306b"
   instance_type = "t2.micro"
   security_groups = [
     "${aws_security_group.open_ports.id}"
