@@ -14,8 +14,11 @@ import java.util.stream.Stream;
 public class RandomDataController {
 
     @RequestMapping(value = "/random", method = RequestMethod.GET)
-    public Collection<SomeRandomData> generateRandomData() {
-        return randomlyGeneratedDataOfSize(25_000);
+    public SomeRandomData generateRandomData() {
+        return randomlyGeneratedDataOfSize(100_000)
+                .stream()
+                .findAny()
+                .orElseThrow(IllegalStateException::new);
     }
 
     private Collection<SomeRandomData> randomlyGeneratedDataOfSize(int n) {

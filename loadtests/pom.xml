@@ -11,31 +11,17 @@
 
     <artifactId>iosr-aws-autoscale-loadtests</artifactId>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
-                <version>2.15.2</version>
-            </plugin>
-
-            <plugin>
-                <groupId>io.gatling</groupId>
-                <artifactId>gatling-maven-plugin</artifactId>
-                <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <properties>
+        <source.property>1.8</source.property>
+        <target.property>1.8</target.property>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <gatling-plugin.version>2.2.1</gatling-plugin.version>
+        <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
+        <scala.version>2.11.8</scala.version>
+    </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>io.gatling.highcharts</groupId>
             <artifactId>gatling-charts-highcharts</artifactId>
@@ -43,11 +29,45 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>io.gatling</groupId>
-            <artifactId>gatling-test-framework</artifactId>
-            <version>2.2.3</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
+
+    <build>
+
+        <!-- Test source directory -->
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
+
+        <plugins>
+
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>${scala-maven-plugin.version}</version>
+                <configuration>
+                    <scalaVersion>${scala.version}</scalaVersion>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-maven-plugin</artifactId>
+                <version>${gatling-plugin.version}</version>
+
+                <executions>
+
+                    <execution>
+                        <id>dynamic-load-balancing-scn</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <simulationClass>pl.edu.agh.aws.autoscale.DynamicLoadBalancingScenario</simulationClass>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
