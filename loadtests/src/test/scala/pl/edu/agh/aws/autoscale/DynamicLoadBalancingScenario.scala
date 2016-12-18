@@ -19,9 +19,7 @@ class DynamicLoadBalancingScenario extends Simulation {
 
   val dynamicLoadBalancingScnCfg = dynamicLoadBalancingScn
     .inject(
-      constantUsersPerSec(1) during(30 seconds),
-      constantUsersPerSec(2) during(30 seconds),
-      constantUsersPerSec(3) during(30 seconds))
+      constantUsersPerSec(1) during(180 seconds))
     .protocols(httpConf)
 
   setUp(

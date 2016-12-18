@@ -70,3 +70,55 @@ resource "aws_launch_configuration" "autoscaling_conf" {
     create_before_destroy = true
   }
 }
+
+resource "aws_autoscaling_policy" "app-scale-up" {
+  name = "app-scale-up"
+  scaling_adjustment = 1
+  adjustment_type = "ChangeInCapacity"
+  cooldown = 300
+  autoscaling_group_name = "${aws_autoscaling_group.web-asg.name}"
+}
+
+resource "aws_autoscaling_policy" "app-scale-down" {
+  name = "app-scale-down"
+  scaling_adjustment = -1
+  adjustment_type = "ChangeInCapacity"
+  cooldown = 300
+  autoscaling_group_name = "${aws_autoscaling_group.web-asg.name}"
+}
+
+resource "aws_cloudwatch_metric_alarm" "cpu-high" {
+  alarm_name = "high-cpu-usage"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods = "2"
+  metric_name = "CPUUtilization"
+  namespace = "AWS/EC2"
+  period = "60"
+  statistic = "Average"
+  threshold = "60"
+  alarm_description = "This metric monitors ec2 cpu for high utilization on app hosts"
+  alarm_actions = [
+    "${aws_autoscaling_policy.app-scale-up.arn}"
+  ]
+  dimensions {
+    AutoScalingGroupName = "${aws_autoscaling_group.web-asg.name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "cpu-low" {
+  alarm_name = "low-cpu-usage"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods = "2"
+  metric_name = "CPUUtilization"
+  namespace = "AWS/EC2"
+  period = "60"
+  statistic = "Average"
+  threshold = "40"
+  alarm_description = "This metric monitors ec2 cpu for low utilization on app hosts"
+  alarm_actions = [
+    "${aws_autoscaling_policy.app-scale-down.arn}"
+  ]
+  dimensions {
+    AutoScalingGroupName = "${aws_autoscaling_group.web-asg.name}"
+  }
+}
